@@ -1,3 +1,4 @@
+import ComponentsDemo from "./pages/ComponentsDemo";
 import { Routes, Route } from "react-router-dom";
 
 import Home from "./pages/Home";
@@ -7,12 +8,16 @@ import Login from "./pages/Login";
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/about" element={<About />} />
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/login" element={<Login />} />
-    </Routes>
+    <>
+      <ComponentsDemo />
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/login" element={<Login />} />
+      </Routes>
+    </>
   );
 }
 
