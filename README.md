@@ -159,7 +159,7 @@ POST	/api/ai/property-description	Private	Generate AI property description
 Create a .env file inside the backend folder.
 
 PORT=5000
-MONGODB_URI=your_mongodb_connection_string
+mongodb+srv://ridhi6066_db_user:vRrdzkJZ1IgLzRQg@pahadi-stay.7bgrhlp.mongodb.net/?appName=pahadi-stay
 JWT_SECRET=your_jwt_secret_key
 CLIENT_URL=http://localhost:5173
 FRONTEND_URL=https://home-stay-liard-ten.vercel.app
