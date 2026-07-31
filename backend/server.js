@@ -30,20 +30,18 @@ app.get("/", (req, res) => {
   res.json({ message: "Pahadi Stay Backend is Running!" });
 });
 
-// GET All Homestays from MongoDB
-app.get("/api/homestays", protect,
-   async (req, res) => {
-  try {
-    const homestays = await Homestay.find({ 
-      user:req.userId,
-    });
-    res.status(200).json(homestays);
-  } catch (error) {
-    res.status(500).json({
-      message: "Failed to fetch homestays",
-      error: error.message,
-    });
-  }
+/// GET All Homestays from MongoDB
+app.get("/api/homestays", async (req, res) => {
+    try {
+        const homestays = await Homestay.find();
+
+        res.status(200).json(homestays);
+    } catch (error) {
+        res.status(500).json({
+            message: "Failed to fetch homestays",
+            error: error.message,
+        });
+    }
 });
 
 // CREATE a new homestay
