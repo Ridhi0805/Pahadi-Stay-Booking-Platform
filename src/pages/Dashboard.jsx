@@ -19,7 +19,6 @@ function Dashboard() {
 
   const token = localStorage.getItem("token");
 
-  // Fetch user's homestays
   const fetchHomestays = () => {
     fetch(`${import.meta.env.VITE_API_URL}/api/homestays`, {
       headers: {
@@ -30,7 +29,6 @@ function Dashboard() {
         if (!response.ok) {
           throw new Error("Failed to fetch dashboard data");
         }
-
         return response.json();
       })
       .then((data) => {
@@ -45,14 +43,11 @@ function Dashboard() {
   };
 
   useEffect(() => {
-    if (!token) {
-      return;
+    if (token) {
+      fetchHomestays();
     }
-
-    fetchHomestays();
   }, [token]);
 
-  // Start editing
   const handleEdit = (homestay) => {
     setEditingId(homestay._id);
     setEditName(homestay.name);
@@ -62,14 +57,10 @@ function Dashboard() {
     setError("");
   };
 
-  // Update homestay
   const handleUpdate = async (id) => {
     try {
-      setMessage("");
-      setError("");
-
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/homestays/${id}`
+        `${import.meta.env.VITE_API_URL}/api/homestays/${id}`,
         {
           method: "PUT",
           headers: {
@@ -92,7 +83,6 @@ function Dashboard() {
 
       setMessage("Homestay updated successfully!");
       setEditingId(null);
-
       fetchHomestays();
     } catch (error) {
       console.error(error);
@@ -100,22 +90,16 @@ function Dashboard() {
     }
   };
 
-  // Delete homestay
   const handleDelete = async (id) => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this homestay?"
     );
 
-    if (!confirmDelete) {
-      return;
-    }
+    if (!confirmDelete) return;
 
     try {
-      setMessage("");
-      setError("");
-
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/homestays/${id}`
+        `${import.meta.env.VITE_API_URL}/api/homestays/${id}`,
         {
           method: "DELETE",
           headers: {
@@ -131,7 +115,6 @@ function Dashboard() {
       }
 
       setMessage("Homestay deleted successfully!");
-
       fetchHomestays();
     } catch (error) {
       console.error(error);
@@ -156,11 +139,6 @@ function Dashboard() {
           onClick={() => {
             window.location.href = "/create-homestay";
           }}
-          style={{
-            padding: "10px 20px",
-            marginTop: "15px",
-            cursor: "pointer",
-          }}
         >
           Create Homestay
         </button>
@@ -169,95 +147,63 @@ function Dashboard() {
 
         {error && <Toast type="error" message={error} />}
 
-        {message && <p style={{ color: "green" }}>{message}</p>}
+        {message && <p>{message}</p>}
 
         {!loading && !error && homestays.length === 0 && (
           <p>No homestays available yet.</p>
         )}
 
-        {!loading && !error && homestays.length > 0 && (
-          <div>
-            <h2>Available Homestays</h2>
+        {!loading &&
+          !error &&
+          homestays.map((homestay) => (
+            <div key={homestay._id}>
+              {editingId === homestay._id ? (
+                <>
+                  <h3>Edit Homestay</h3>
 
-            {homestays.map((homestay) => (
-              <div
-                key={homestay._id}
-                style={{
-                  border: "1px solid #ccc",
-                  padding: "20px",
-                  marginTop: "15px",
-                  borderRadius: "10px",
-                }}
-              >
-                {editingId === homestay._id ? (
-                  <>
-                    <h3>Edit Homestay</h3>
+                  <input
+                    value={editName}
+                    onChange={(e) => setEditName(e.target.value)}
+                    placeholder="Name"
+                  />
 
-                    <input
-                      type="text"
-                      value={editName}
-                      onChange={(e) => setEditName(e.target.value)}
-                      placeholder="Homestay name"
-                    />
+                  <input
+                    value={editLocation}
+                    onChange={(e) => setEditLocation(e.target.value)}
+                    placeholder="Location"
+                  />
 
-                    <br />
-                    <br />
+                  <input
+                    value={editPrice}
+                    onChange={(e) => setEditPrice(e.target.value)}
+                    placeholder="Price"
+                  />
 
-                    <input
-                      type="text"
-                      value={editLocation}
-                      onChange={(e) => setEditLocation(e.target.value)}
-                      placeholder="Location"
-                    />
+                  <button onClick={() => handleUpdate(homestay._id)}>
+                    Save
+                  </button>
 
-                    <br />
-                    <br />
+                  <button onClick={() => setEditingId(null)}>
+                    Cancel
+                  </button>
+                </>
+              ) : (
+                <>
+                  <h3>{homestay.name}</h3>
+                  <p>{homestay.location}</p>
+                  <p>₹{homestay.price} per night</p>
 
-                    <input
-                      type="number"
-                      value={editPrice}
-                      onChange={(e) => setEditPrice(e.target.value)}
-                      placeholder="Price"
-                    />
+                  <button onClick={() => handleEdit(homestay)}>
+                    Edit
+                  </button>
 
-                    <br />
-                    <br />
-
-                    <button onClick={() => handleUpdate(homestay._id)}>
-                      Save Changes
-                    </button>
-
-                    <button
-                      onClick={() => setEditingId(null)}
-                      style={{ marginLeft: "10px" }}
-                    >
-                      Cancel
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <h3>{homestay.name}</h3>
-
-                    <p>Location: {homestay.location}</p>
-
-                    <p>Price: ₹{homestay.price} per night</p>
-
-                    <button onClick={() => handleEdit(homestay)}>
-                      Edit
-                    </button>
-
-                    <button
-                      onClick={() => handleDelete(homestay._id)}
-                      style={{ marginLeft: "10px" }}
-                    >
-                      Delete
-                    </button>
-                  </>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
+                  <button onClick={() => handleDelete(homestay._id)}>
+                    Delete
+                  </button>
+                </>
+              )}
+            </div>
+          ))}
       </main>
 
       <Footer />
