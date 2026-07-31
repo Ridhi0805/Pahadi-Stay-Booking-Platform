@@ -21,7 +21,7 @@ function Dashboard() {
 
   // Fetch user's homestays
   const fetchHomestays = () => {
-    fetch("http://localhost:5000/api/homestays", {
+    fetch(`${import.meta.env.VITE_API_URL}/api/homestays`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -69,7 +69,7 @@ function Dashboard() {
       setError("");
 
       const response = await fetch(
-        `http://localhost:5000/api/homestays/${id}`,
+        `${import.meta.env.VITE_API_URL}/api/homestays/${id}`
         {
           method: "PUT",
           headers: {
@@ -115,7 +115,7 @@ function Dashboard() {
       setError("");
 
       const response = await fetch(
-        `http://localhost:5000/api/homestays/${id}`,
+        `${import.meta.env.VITE_API_URL}/api/homestays/${id}`
         {
           method: "DELETE",
           headers: {
