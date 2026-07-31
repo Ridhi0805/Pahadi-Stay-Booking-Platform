@@ -1,11 +1,11 @@
-import Loader from "../components/ui/Loader";
-import Toast from "../components/ui/Toast";
 import { useEffect, useState } from "react";
 
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
 import Card from "../components/Card";
 import Footer from "../components/Footer";
+import Loader from "../components/ui/Loader";
+import Toast from "../components/ui/Toast";
 
 function Home() {
   const [homestays, setHomestays] = useState([]);
