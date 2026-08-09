@@ -4,6 +4,7 @@ function CreateHomestay() {
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
   const [price, setPrice] = useState("");
+  const [image, setImage] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
@@ -21,7 +22,9 @@ function CreateHomestay() {
     }
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/homestays`, {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/homestays`,
+        {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -31,6 +34,7 @@ function CreateHomestay() {
             name: name,
             location: location,
             price: Number(price),
+            image: image,
           }),
         }
       );
@@ -51,6 +55,7 @@ function CreateHomestay() {
       setName("");
       setLocation("");
       setPrice("");
+      setImage("");
     } catch (error) {
       console.error("Create homestay error:", error);
       setError(error.message);
@@ -99,6 +104,19 @@ function CreateHomestay() {
             onChange={(event) => setPrice(event.target.value)}
             placeholder="Enter price"
             required
+          />
+        </div>
+
+        <br />
+
+        <div>
+          <label>Image URL</label>
+          <br />
+          <input
+            type="url"
+            value={image}
+            onChange={(event) => setImage(event.target.value)}
+            placeholder="Paste image URL"
           />
         </div>
 

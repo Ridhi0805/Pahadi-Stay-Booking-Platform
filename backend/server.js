@@ -46,15 +46,17 @@ app.get("/api/homestays", async (req, res) => {
 });
 
 // CREATE a new homestay
+// CREATE a new homestay
 app.post("/api/homestays", protect, async (req, res) => {
   try {
-    const { name, location, price } = req.body;
+    const { name, location, price, image } = req.body;
 
     const newHomestay = new Homestay({
       name,
       location,
       price,
-      user:req.userId,
+      image,
+      user: req.userId,
     });
 
     const savedHomestay = await newHomestay.save();
@@ -101,18 +103,6 @@ app.put("/api/homestays/:id", protect, async (req, res) => {
     });
   }
 });
-// CREATE a new homestay
-app.post("/api/homestays", protect, async (req, res) => {
-  // ...
-});
-
-
-// UPDATE a homestay
-app.put("/api/homestays/:id", protect, async (req, res) => {
-  // ...
-});
-
-
 // DELETE a homestay  ← ADD THE NEW CODE HERE
 app.delete("/api/homestays/:id", protect, async (req, res) => {
   try {

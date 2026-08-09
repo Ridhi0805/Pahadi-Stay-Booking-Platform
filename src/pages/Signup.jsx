@@ -10,7 +10,9 @@ function Signup() {
     e.preventDefault();
 
     try {
-      const response = await fetch('${import.meta.env.VITE_API_URL}/api/auth/signup', {
+      const response = await fetch("https://pahadi-stay-booking-platform-1.onrender.com/api/auth/signup",
+
+         {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

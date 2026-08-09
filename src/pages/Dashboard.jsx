@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -12,6 +12,8 @@ function Dashboard() {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
 
+  const navigate = useNavigate();
+
   const [editingId, setEditingId] = useState(null);
   const [editName, setEditName] = useState("");
   const [editLocation, setEditLocation] = useState("");
@@ -19,6 +21,7 @@ function Dashboard() {
 
   const token = localStorage.getItem("token");
 
+  // Fetch all homestays
   const fetchHomestays = () => {
     fetch(`${import.meta.env.VITE_API_URL}/api/homestays`, {
       headers: {
@@ -29,11 +32,13 @@ function Dashboard() {
         if (!response.ok) {
           throw new Error("Failed to fetch dashboard data");
         }
+
         return response.json();
       })
       .then((data) => {
         setHomestays(data);
         setLoading(false);
+        setError("");
       })
       .catch((error) => {
         console.error(error);
@@ -42,12 +47,14 @@ function Dashboard() {
       });
   };
 
+  // Load homestays when dashboard opens
   useEffect(() => {
     if (token) {
       fetchHomestays();
     }
   }, [token]);
 
+  // Start editing
   const handleEdit = (homestay) => {
     setEditingId(homestay._id);
     setEditName(homestay.name);
@@ -57,6 +64,7 @@ function Dashboard() {
     setError("");
   };
 
+  // Update homestay
   const handleUpdate = async (id) => {
     try {
       const response = await fetch(
@@ -75,21 +83,35 @@ function Dashboard() {
         }
       );
 
-      const data = await response.json();
+      const text = await response.text();
+
+      let data = {};
+
+      if (text) {
+        try {
+          data = JSON.parse(text);
+        } catch {
+          data = {};
+        }
+      }
 
       if (!response.ok) {
-        throw new Error(data.message || "Failed to update homestay");
+        throw new Error(
+          data.message || `Update failed (${response.status})`
+        );
       }
 
       setMessage("Homestay updated successfully!");
       setEditingId(null);
+
       fetchHomestays();
     } catch (error) {
-      console.error(error);
+      console.error("UPDATE ERROR:", error);
       setError(error.message);
     }
   };
 
+  // Delete homestay
   const handleDelete = async (id) => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this homestay?"
@@ -108,20 +130,33 @@ function Dashboard() {
         }
       );
 
-      const data = await response.json();
+      const text = await response.text();
+
+      let data = {};
+
+      if (text) {
+        try {
+          data = JSON.parse(text);
+        } catch {
+          data = {};
+        }
+      }
 
       if (!response.ok) {
-        throw new Error(data.message || "Failed to delete homestay");
+        throw new Error(
+          data.message || `Failed to delete homestay (${response.status})`
+        );
       }
 
       setMessage("Homestay deleted successfully!");
       fetchHomestays();
     } catch (error) {
-      console.error(error);
+      console.error("DELETE ERROR:", error);
       setError(error.message);
     }
   };
 
+  // Redirect if user is not logged in
   if (!token) {
     return <Navigate to="/login" replace />;
   }
@@ -135,11 +170,7 @@ function Dashboard() {
 
         <p>Welcome to your Pahadi Stay dashboard.</p>
 
-        <button
-          onClick={() => {
-            window.location.href = "/create-homestay";
-          }}
-        >
+        <button onClick={() => navigate("/create-homestay")}>
           Create Homestay
         </button>
 
@@ -174,6 +205,7 @@ function Dashboard() {
                   />
 
                   <input
+                    type="number"
                     value={editPrice}
                     onChange={(e) => setEditPrice(e.target.value)}
                     placeholder="Price"
@@ -189,8 +221,23 @@ function Dashboard() {
                 </>
               ) : (
                 <>
+                  {homestay.image && (
+                    <img
+                      src={homestay.image}
+                      alt={homestay.name}
+                      style={{
+                        width: "300px",
+                        height: "200px",
+                        objectFit: "cover",
+                        borderRadius: "10px",
+                      }}
+                    />
+                  )}
+
                   <h3>{homestay.name}</h3>
+
                   <p>{homestay.location}</p>
+
                   <p>₹{homestay.price} per night</p>
 
                   <button onClick={() => handleEdit(homestay)}>

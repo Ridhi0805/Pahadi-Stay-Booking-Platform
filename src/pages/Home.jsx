@@ -67,6 +67,7 @@ fetch(`${import.meta.env.VITE_API_URL}/api/homestays`, {
               key={homestay._id}
               title={homestay.name}
               description={`${homestay.location} - ₹${homestay.price} per night`}
+              image={homestay.image}
             />
           ))}
       </div>

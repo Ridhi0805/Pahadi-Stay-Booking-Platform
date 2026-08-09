@@ -34,11 +34,21 @@ function Login() {
         }
       );
 
-      const data = await response.json();
+      const text = await response.text();
 
-      if (!response.ok) {
-        throw new Error(data.message || "Login failed");
-      }
+let data = {};
+
+if (text) {
+  try {
+    data = JSON.parse(text);
+  } catch {
+    throw new Error("Server returned an invalid response.");
+  }
+}
+
+if (!response.ok) {
+  throw new Error(data.message || "Login failed");
+}
 
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
