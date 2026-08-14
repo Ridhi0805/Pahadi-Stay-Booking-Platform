@@ -1,4 +1,7 @@
+import { useNavigate } from "react-router-dom";
+
 function Card({ title, description, image, price, location }) {
+  const navigate = useNavigate();
   return (
     <div
       style={{
@@ -100,18 +103,19 @@ function Card({ title, description, image, price, location }) {
           </strong>
 
           <button
-            style={{
-              background: "#2e7d32",
-              color: "white",
-              border: "none",
-              padding: "10px 16px",
-              borderRadius: "8px",
-              cursor: "pointer",
-              fontWeight: "600",
-            }}
-          >
-            View Stay
-          </button>
+  onClick={() => navigate("/booking")}
+  style={{
+    background: "#2e7d32",
+    color: "white",
+    border: "none",
+    padding: "10px 16px",
+    borderRadius: "8px",
+    cursor: "pointer",
+    fontWeight: "600",
+  }}
+>
+  Book Now
+</button>
         </div>
       </div>
     </div>

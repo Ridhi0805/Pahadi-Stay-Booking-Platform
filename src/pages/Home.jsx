@@ -13,30 +13,32 @@ function Home() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+  const fetchHomestays = async () => {
+    try {
+      setLoading(true);
+      setError("");
 
-fetch(`${import.meta.env.VITE_API_URL}/api/homestays`, {
-  headers: {
-    Authorization: `Bearer ${token}`,
-  },
-})
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to fetch homestays");
-        }
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/homestays`
+      );
 
-        return response.json();
-      })
-      .then((data) => {
-        setHomestays(data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error(error);
-        setError("Unable to load homestays. Please try again.");
-        setLoading(false);
-      });
-  }, []);
+      if (!response.ok) {
+        throw new Error(`Server error: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      setHomestays(data);
+    } catch (error) {
+      console.error("HOME ERROR:", error);
+      setError("Unable to load homestays. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchHomestays();
+}, []);
 
   return (
     <>
