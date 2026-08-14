@@ -4,7 +4,7 @@ import Home from "./pages/Home";
 import About from "./pages/About";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
-import Signup from "./pages/Signup";
+import Booking from "./pages/Booking";
 import CreateHomestay from "./pages/CreateHomestay";
 import AIFeature from "./pages/AIFeature";
 function App() {
@@ -15,6 +15,7 @@ function App() {
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
+      <Route path="/booking" elements ={<Booking/>}/>
       <Route path="/create-homestay" element={<CreateHomestay />} />
       <Route path="/ai" element={<AIFeature />} />
     </Routes>

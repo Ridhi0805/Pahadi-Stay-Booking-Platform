@@ -47,9 +47,10 @@ fetch(`${import.meta.env.VITE_API_URL}/api/homestays`, {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: "20px",
-          padding: "20px",
+          gridTemplateColumns: "repeat(auto-fit,minmax(300px, 1fr))",
+          gap: "30px",
+          padding: "50px 7%",
+          background:"#f5f7f2",
         }}
       >
         {loading && <Loader text="Loading homestays..." />}
@@ -66,7 +67,9 @@ fetch(`${import.meta.env.VITE_API_URL}/api/homestays`, {
             <Card
               key={homestay._id}
               title={homestay.name}
-              description={`${homestay.location} - ₹${homestay.price} per night`}
+              description="enjoy a peacful stay surrounded by the beautiful mountsains od UK"
+              location={homestay.location}
+              price={homestay.price}
               image={homestay.image}
             />
           ))}
